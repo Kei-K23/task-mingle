@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { OrganizationSwitcher, UserButton } from "@clerk/nextjs";
 import { Plus } from "lucide-react";
 import React from "react";
+import MobileSidebar from "./mobileSidebar";
 
 export const Navbar = () => {
   return (
@@ -12,7 +13,7 @@ export const Navbar = () => {
         <nav className="w-full md:max-w-screen-2xl flex items-center justify-between">
           <div className="flex items-center gap-x-3">
             <Logo />
-
+            <MobileSidebar />
             <ActionTooltip title="create board">
               <Button size={"sm"}>
                 <Plus className="w-5 h-5 mr-1" />
