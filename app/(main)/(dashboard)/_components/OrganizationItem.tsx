@@ -4,6 +4,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import { Activity, CreditCard, Layout } from "lucide-react";
 import Image from "next/image";
@@ -68,15 +69,17 @@ const OrganizationItem = ({
           isActive && !isExpanded && "bg-slate-100"
         )}
       >
-        <div className="rounded-md relative w-7 h-7">
-          <Image
-            src={organization.imageUrl}
-            alt={organization.name}
-            fill
-            className="rounded-md"
-          />
+        <div className="flex">
+          <div className="rounded-md relative w-7 h-7">
+            <Image
+              src={organization.imageUrl}
+              alt={organization.name}
+              fill
+              className="rounded-md"
+            />
+          </div>
+          <span className="ml-2">{organization.name}</span>
         </div>
-        <span>{organization.name}</span>
       </AccordionTrigger>
       <AccordionContent>
         {routes.map((route) => (
@@ -99,3 +102,11 @@ const OrganizationItem = ({
 };
 
 export default OrganizationItem;
+
+OrganizationItem.Skeleton = function SkeletonOrganizationItem() {
+  return (
+    <div className="flex rounded-md w-full h-9">
+      <Skeleton className="w-full h-full" />
+    </div>
+  );
+};

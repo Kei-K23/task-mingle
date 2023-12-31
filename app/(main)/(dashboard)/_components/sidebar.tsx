@@ -51,12 +51,24 @@ const Sidebar = ({ sidebarStorageKey }: SidebarProps) => {
   };
 
   if (!isLoadingOrg || !isLoadingOrgList || userMemberships.isLoading) {
-    return <Skeleton />;
+    return (
+      <>
+        <div className="flex items-center mb-3">
+          <Skeleton className="w-[130px] h-8" />
+          <Skeleton className="w-[50px] h-8 ml-auto" />
+        </div>
+        <div className="space-y-2">
+          <OrganizationItem.Skeleton />
+          <OrganizationItem.Skeleton />
+          <OrganizationItem.Skeleton />
+        </div>
+      </>
+    );
   }
 
   return (
     <>
-      <div className="text-base flex items-center">
+      <div className="text-base flex items-center mb-3">
         <span>Workspace</span>
         <ActionTooltip title="create organization">
           <Link
