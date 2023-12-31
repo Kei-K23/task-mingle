@@ -18,7 +18,7 @@ export const Navbar = () => {
             </Link>
             <Link
               className={buttonVariants({ variant: "outline", size: "sm" })}
-              href={"/sign-in"}
+              href={"/sign-up"}
             >
               Get TaskMingle for Free
             </Link>
