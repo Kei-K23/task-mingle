@@ -9,7 +9,7 @@ import { useOrganization, useOrganizationList } from "@clerk/nextjs";
 import { Plus } from "lucide-react";
 import Link from "next/link";
 import { useLocalStorage } from "usehooks-ts";
-import OrganizationItem, { OrganizationType } from "./OrganizationItem";
+import OrganizationItem, { OrganizationType } from "./organizationItem";
 
 interface SidebarProps {
   sidebarStorageKey: string;

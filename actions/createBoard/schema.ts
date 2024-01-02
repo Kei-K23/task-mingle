@@ -9,4 +9,8 @@ export const CreateBoardSchema = z.object({
     .min(3, {
       message: "Title must be at least 3 character",
     }),
+  image: z.string({
+    required_error: "Image is require!",
+    invalid_type_error: "Image must be type of string",
+  }),
 });
