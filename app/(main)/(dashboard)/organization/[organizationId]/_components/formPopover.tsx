@@ -13,6 +13,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { useAction } from "@/hooks/useAction";
 import { X } from "lucide-react";
 import React from "react";
+import FormPicker from "./formPicker";
 
 interface FormPopoverProps {
   children: React.ReactNode;
@@ -56,6 +57,9 @@ const FormPopover = ({
         </PopoverClose>
         <form action={onSubmit} className="space-y-4">
           <div className="space-y-4">
+            <FormPicker id="image" errors={fieldsErrors} />
+          </div>
+          <div className="space-y-4">
             <FormInput
               id="title"
               label="Create Board"
@@ -63,7 +67,7 @@ const FormPopover = ({
               errors={fieldsErrors}
             />
           </div>
-          <FormButton>Create</FormButton>
+          <FormButton className="w-full">Create</FormButton>
         </form>
       </PopoverContent>
     </Popover>

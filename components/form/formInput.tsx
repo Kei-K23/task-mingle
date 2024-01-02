@@ -8,12 +8,12 @@ import FormError from "./formError";
 
 interface FormInputProps {
   id: string;
+  errors?: Record<string, string[] | undefined>;
   label?: string;
   type?: string;
   placeholder?: string;
   className?: string;
   disabled?: boolean;
-  errors?: Record<string, string[] | undefined>;
   defaultValue?: string;
   onBlur?: () => void;
   required?: boolean;
