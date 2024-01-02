@@ -4,6 +4,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { cn } from "@/lib/utils";
 import React from "react";
 
 interface ActionTooltipProps {
@@ -11,6 +12,7 @@ interface ActionTooltipProps {
   title: string;
   align?: "center" | "start" | "end";
   side?: "bottom" | "top" | "left" | "right";
+  className?: string;
 }
 
 const ActionTooltip = ({
@@ -18,12 +20,17 @@ const ActionTooltip = ({
   children,
   side = "top",
   title,
+  className,
 }: ActionTooltipProps) => {
   return (
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>{children}</TooltipTrigger>
-        <TooltipContent align={align} side={side} className="lowercase">
+        <TooltipContent
+          align={align}
+          side={side}
+          className={cn("lowercase", className)}
+        >
           <p className="capitalize">{title}</p>
         </TooltipContent>
       </Tooltip>
