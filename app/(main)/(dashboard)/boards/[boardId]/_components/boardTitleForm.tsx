@@ -1,7 +1,6 @@
 "use client";
 
 import { updateBoard } from "@/actions/updateBoard";
-import FormError from "@/components/form/formError";
 import FormInput from "@/components/form/formInput";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
@@ -62,8 +61,8 @@ const BoardTitleForm = ({ board }: BoardTitleFormProps) => {
           defaultValue={board.title}
           onBlur={onBlur}
           className="bg-transparent"
+          errors={fieldsErrors}
         />
-        <FormError id="title" errors={fieldsErrors} />
       </form>
     );
   }
