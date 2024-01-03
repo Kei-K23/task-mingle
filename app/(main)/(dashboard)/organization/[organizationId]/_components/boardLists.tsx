@@ -31,16 +31,16 @@ const BoardLists = async () => {
         <FormPopover align="center" side="right" sideOffset={0}>
           <div
             role="button"
-            className="border w-full h-full px-3 py-2 text-center bg-slate-200 hover:bg-slate-200/85 rounded-md"
+            className="border w-full h-full px-3 py-2 text-center bg-slate-200 hover:bg-slate-200/85 rounded-md relative flex justify-center items-center flex-col"
           >
             <p>Create new board</p>
             <span>5 remaining</span>
             <ActionTooltip
               title="Free Workspaces board can have up to 5. For unlimited accept Workspaces upgrade the plan."
-              className="w-[200px]"
+              className="w-[250px]"
               side="bottom"
             >
-              <HelpCircleIcon className="w-4 h-4" />
+              <HelpCircleIcon className="w-4 h-4 absolute bottom-2 left-2" />
             </ActionTooltip>
           </div>
         </FormPopover>
