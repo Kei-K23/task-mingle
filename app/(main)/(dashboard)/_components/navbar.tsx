@@ -9,7 +9,7 @@ import FormPopover from "../organization/[organizationId]/_components/formPopove
 
 export const Navbar = () => {
   return (
-    <header className="bg-white border-b border-b-slate-300 fixed top-0 w-full px-8 py-3 md:py-4 z-40">
+    <header className="bg-white border-b border-b-slate-300 fixed top-0 w-full px-4 md:px-8 py-3 md:py-4 z-40 h-16">
       <div className="flex items-center justify-center">
         <nav className="w-full md:max-w-screen-2xl flex items-center justify-between">
           <div className="flex items-center gap-x-3">
