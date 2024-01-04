@@ -1,29 +1,28 @@
 "use client";
+
+import { useToast } from "@/components/ui/use-toast";
+import { List } from "@prisma/client";
 import React, { ElementRef, useRef, useState } from "react";
 import ListWrapper from "./listWrapper";
-import { Button } from "@/components/ui/button";
-import { PlusCircle, X } from "lucide-react";
-import { useEventListener, useOnClickOutside } from "usehooks-ts";
 import FormInput from "@/components/form/formInput";
-import FormButton from "@/components/form/formButton";
-import { useToast } from "@/components/ui/use-toast";
+import { useEventListener } from "usehooks-ts";
 import { useAction } from "@/hooks/useAction";
-import { createList } from "@/actions/createList";
+import { updateList } from "@/actions/updateList";
 
-interface ListFormProps {
-  boardId: string;
+interface ListHeaderProps {
+  list: List;
 }
 
-const ListForm = ({ boardId }: ListFormProps) => {
+const ListHeader = ({ list }: ListHeaderProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const formRef = useRef<ElementRef<"form">>(null);
   const inputRef = useRef<ElementRef<"input">>(null);
   const { toast } = useToast();
 
-  const { execute, fieldsErrors } = useAction(createList, {
+  const { execute, fieldsErrors } = useAction(updateList, {
     onSuccess: (data) => {
       toast({
-        title: `Successfully created "${data.title}"`,
+        title: `Successfully updated "${data.title}"`,
       });
       disableEditing();
     },
@@ -33,6 +32,7 @@ const ListForm = ({ boardId }: ListFormProps) => {
       });
     },
   });
+
   //! need to clear error message from FromError when close the form
   function disableEditing() {
     setIsEditing(false);
@@ -42,6 +42,7 @@ const ListForm = ({ boardId }: ListFormProps) => {
     setIsEditing(true);
     setTimeout(() => {
       inputRef?.current?.focus();
+      inputRef?.current?.select();
     }, 0);
   }
 
@@ -54,15 +55,24 @@ const ListForm = ({ boardId }: ListFormProps) => {
   function onSubmit(formData: FormData) {
     const title = formData.get("title") as string;
     const boardId = formData.get("boardId") as string;
+    const id = formData.get("id") as string;
+
+    if (list.title === title) {
+      return disableEditing();
+    }
 
     execute({
       title,
       boardId,
+      id,
     });
   }
 
   useEventListener("keydown", onKeyDown);
-  useOnClickOutside(formRef, disableEditing);
+
+  function onBlur() {
+    formRef?.current?.requestSubmit();
+  }
 
   if (isEditing) {
     return (
@@ -77,33 +87,25 @@ const ListForm = ({ boardId }: ListFormProps) => {
             id="title"
             className="w-full"
             placeholder="Enter list title..."
+            onBlur={onBlur}
+            defaultValue={list.title}
             errors={fieldsErrors}
           />
-          <input type="hidden" name="boardId" value={boardId} />
-          <div className="flex items-center gap-x-3">
-            <FormButton>create</FormButton>
-            <Button size={"icon"} variant={"ghost"} onClick={disableEditing}>
-              <X className="w-4 h-4" />
-            </Button>
-          </div>
+          <input type="hidden" name="boardId" value={list.boardId} />
+          <input type="hidden" name="id" value={list.id} />
         </form>
       </ListWrapper>
     );
   }
 
   return (
-    <div>
-      <ListWrapper>
-        <Button
-          className="rounded-md w-full bg-white/90 text-black hover:bg-white/80 transition flex items-center justify-start gap-x-1"
-          onClick={enableEditing}
-        >
-          <PlusCircle className="w-4 h-4" />
-          Add List
-        </Button>
-      </ListWrapper>
+    <div
+      className="rounded-md w-full bg-white/90 text-black hover:bg-white/80 transition flex items-center justify-start gap-x-1 h-10 px-4 py-2"
+      onClick={enableEditing}
+    >
+      {list.title}
     </div>
   );
 };
 
-export default ListForm;
+export default ListHeader;
