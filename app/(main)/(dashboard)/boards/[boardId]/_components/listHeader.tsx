@@ -102,7 +102,7 @@ const ListHeader = ({ list }: ListHeaderProps) => {
   return (
     <div className="flex items-center justify-between rounded-md   bg-white/90 text-black hover:bg-white/80 transition">
       <div
-        className=" flex items-center w-full flex-1 justify-start gap-x-1 h-10 px-4 py-2"
+        className="flex truncate items-center w-full flex-1 justify-start gap-x-1 h-10 px-4 py-2"
         onClick={enableEditing}
       >
         {list.title}

@@ -12,7 +12,8 @@ import { MoreHorizontalIcon, Plus, Trash2Icon, X } from "lucide-react";
 import React, { ElementRef, useRef } from "react";
 import { ListWithCards } from "./listContainer";
 import { Separator } from "@/components/ui/separator";
-import { deleteList } from "@/actions/deleteList";
+import ListDelete from "./listDelete";
+import ListCopy from "./listCopy";
 
 interface ListOptionsProps {
   list: ListWithCards;
@@ -21,27 +22,6 @@ interface ListOptionsProps {
 const ListOptions = ({ list }: ListOptionsProps) => {
   const { toast } = useToast();
   const closeRef = useRef<ElementRef<"button">>(null);
-
-  const { execute, isLoading } = useAction(deleteList, {
-    onSuccess: (data) => {
-      toast({
-        title: `List "${data.title}" deleted!`,
-      });
-      closeRef?.current?.click();
-    },
-    onError: (e) => {
-      toast({
-        title: e,
-      });
-    },
-  });
-
-  function onDelete() {
-    execute({
-      id: list.id,
-      boardId: list.boardId,
-    });
-  }
 
   return (
     <Popover>
@@ -67,25 +47,9 @@ const ListOptions = ({ list }: ListOptionsProps) => {
             Add Card...
           </Button>
 
-          <Button
-            variant={"ghost"}
-            className="w-full flex items-center justify-start gap-x-1"
-            size={"sm"}
-          >
-            <Trash2Icon className="w-4 h-4" />
-            Copy the list...
-          </Button>
+          <ListCopy list={list} closeRef={closeRef} />
           <Separator className="w-full h-[2px] my-4" />
-          <Button
-            disabled={isLoading}
-            variant={"destructive"}
-            className="w-full flex items-center gap-x-1"
-            size={"sm"}
-            onClick={onDelete}
-          >
-            <Trash2Icon className="w-4 h-4" />
-            Delete the List
-          </Button>
+          <ListDelete list={list} closeRef={closeRef} />
         </div>
       </PopoverContent>
     </Popover>

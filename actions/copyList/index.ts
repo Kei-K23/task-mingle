@@ -5,7 +5,7 @@ import { InputType, ReturnType } from "./type";
 import { db } from "@/lib/db";
 import { revalidatePath } from "next/cache";
 import { createSafeAction } from "@/lib/create-safe-action";
-import { CreateListSchema } from "./schema";
+import { CopyListSchema } from "./schema";
 
 async function handler(validatedData: InputType): Promise<ReturnType> {
   const { userId, orgId } = auth();
@@ -16,10 +16,8 @@ async function handler(validatedData: InputType): Promise<ReturnType> {
     };
   }
 
-  const { title, boardId } = validatedData;
-
+  const { boardId, id } = validatedData;
   let list;
-
   try {
     const board = await db.board.findFirst({
       where: {
@@ -34,12 +32,25 @@ async function handler(validatedData: InputType): Promise<ReturnType> {
       };
     }
 
+    const existingList = await db.list.findFirst({
+      where: {
+        id,
+        boardId,
+        board: {
+          orgId,
+        },
+      },
+      include: {
+        cards: true,
+      },
+    });
+
     const lastOrder = await db.list.findFirst({
       where: {
         boardId,
       },
       orderBy: {
-        order: "asc",
+        order: "desc",
       },
       select: {
         order: true,
@@ -48,10 +59,16 @@ async function handler(validatedData: InputType): Promise<ReturnType> {
 
     const newOrder = lastOrder ? lastOrder.order + 1 : 1;
 
+    if (!existingList) {
+      return {
+        error: "Could not find the list to copy!",
+      };
+    }
+
     list = await db.list.create({
       data: {
-        title,
-        boardId,
+        boardId: existingList?.boardId,
+        title: `${existingList?.title}-copy`,
         order: newOrder,
       },
       include: {
@@ -60,7 +77,7 @@ async function handler(validatedData: InputType): Promise<ReturnType> {
     });
   } catch (error) {
     return {
-      error: "Something went wrong when creating list!",
+      error: "Something went wrong when copying list!",
     };
   }
 
@@ -68,4 +85,4 @@ async function handler(validatedData: InputType): Promise<ReturnType> {
   return { data: list };
 }
 
-export const createList = createSafeAction(CreateListSchema, handler);
+export const copyList = createSafeAction(CopyListSchema, handler);
