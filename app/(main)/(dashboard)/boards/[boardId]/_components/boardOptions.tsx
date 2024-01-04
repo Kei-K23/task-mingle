@@ -55,7 +55,7 @@ const BoardOptions = ({ id }: BoardOptionsProps) => {
             <X className="w-4 h-4" />
           </Button>
         </PopoverClose>
-        <p className="text-center font-bold">Manage Board</p>
+        <p className="text-[13px] text-center font-bold">Manage Board</p>
         <div className="w-full mt-4">
           <Button
             disabled={isLoading}

@@ -1,16 +1,17 @@
 "use client";
 
 import { useToast } from "@/components/ui/use-toast";
-import { List } from "@prisma/client";
 import React, { ElementRef, useRef, useState } from "react";
 import ListWrapper from "./listWrapper";
 import FormInput from "@/components/form/formInput";
 import { useEventListener } from "usehooks-ts";
 import { useAction } from "@/hooks/useAction";
 import { updateList } from "@/actions/updateList";
+import ListOptions from "./listOptions";
+import { ListWithCards } from "./listContainer";
 
 interface ListHeaderProps {
-  list: List;
+  list: ListWithCards;
 }
 
 const ListHeader = ({ list }: ListHeaderProps) => {
@@ -80,7 +81,7 @@ const ListHeader = ({ list }: ListHeaderProps) => {
         <form
           action={onSubmit}
           ref={formRef}
-          className="pt-4 space-y-4 rounded-md w-full bg-white/90 text-black px-3 py-2"
+          className="space-y-4 rounded-md w-full bg-white/90 text-black px-3 py-2"
         >
           <FormInput
             ref={inputRef}
@@ -99,11 +100,14 @@ const ListHeader = ({ list }: ListHeaderProps) => {
   }
 
   return (
-    <div
-      className="rounded-md w-full bg-white/90 text-black hover:bg-white/80 transition flex items-center justify-start gap-x-1 h-10 px-4 py-2"
-      onClick={enableEditing}
-    >
-      {list.title}
+    <div className="flex items-center justify-between rounded-md   bg-white/90 text-black hover:bg-white/80 transition">
+      <div
+        className=" flex items-center w-full flex-1 justify-start gap-x-1 h-10 px-4 py-2"
+        onClick={enableEditing}
+      >
+        {list.title}
+      </div>
+      <ListOptions list={list} />
     </div>
   );
 };
