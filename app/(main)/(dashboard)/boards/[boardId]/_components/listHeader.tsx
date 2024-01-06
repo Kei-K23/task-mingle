@@ -1,6 +1,5 @@
 "use client";
 
-import { useToast } from "@/components/ui/use-toast";
 import React, { ElementRef, useRef, useState } from "react";
 import ListWrapper from "./listWrapper";
 import FormInput from "@/components/form/formInput";
@@ -14,7 +13,8 @@ import ActionTooltip from "@/components/actionTooltip";
 import { cn } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
 import CardItem from "./cardItem";
-import { Draggable, Droppable } from "@hello-pangea/dnd";
+import { Droppable } from "@hello-pangea/dnd";
+import { useToast } from "@/components/ui/use-toast";
 
 interface ListHeaderProps {
   list: ListWithCards;
@@ -26,7 +26,6 @@ const ListHeader = ({ list }: ListHeaderProps) => {
   const formRef = useRef<ElementRef<"form">>(null);
   const inputRef = useRef<ElementRef<"input">>(null);
   const { toast } = useToast();
-
   const { execute, fieldsErrors } = useAction(updateList, {
     onSuccess: (data) => {
       toast({
