@@ -14,6 +14,7 @@ import ActionTooltip from "@/components/actionTooltip";
 import { cn } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
 import CardItem from "./cardItem";
+import { Draggable, Droppable } from "@hello-pangea/dnd";
 
 interface ListHeaderProps {
   list: ListWithCards;
@@ -106,7 +107,7 @@ const ListHeader = ({ list }: ListHeaderProps) => {
   }
 
   return (
-    <div className="bg-secondary text-secondary-foreground  transition rounded-md">
+    <>
       <div className="flex items-center justify-between">
         <ActionTooltip title="click to edit title">
           <div
@@ -126,16 +127,23 @@ const ListHeader = ({ list }: ListHeaderProps) => {
       {list.cards.length ? (
         <Separator className="w-[90%] mx-auto h-[1.4px]" />
       ) : null}
-      <div
-        className={cn(
-          "flex flex-col gap-y-2 px-3 py-2",
-          list.cards.length > 0 ? "my-2" : "my-0 px-0 py-0"
+      <Droppable droppableId={list.id} type="card">
+        {(provided) => (
+          <ol
+            {...provided.droppableProps}
+            ref={provided.innerRef}
+            className={cn(
+              "flex flex-col gap-y-2 px-3 py-2",
+              list.cards.length > 0 ? "my-2" : "my-0 px-0 py-0"
+            )}
+          >
+            {list.cards.map((card, index) => (
+              <CardItem key={card.id} card={card} index={index} />
+            ))}
+            {provided.placeholder}
+          </ol>
         )}
-      >
-        {list.cards.map((card, index) => (
-          <CardItem key={card.id} card={card} index={index} />
-        ))}
-      </div>
+      </Droppable>
       {list.cards.length ? (
         <Separator className="w-[90%] mx-auto h-[1.4px]" />
       ) : null}
@@ -146,7 +154,7 @@ const ListHeader = ({ list }: ListHeaderProps) => {
           setIsCreatingCard={setIsCreatingCard}
         />
       </div>
-    </div>
+    </>
   );
 };
 
