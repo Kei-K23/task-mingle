@@ -9,6 +9,11 @@ import { useAction } from "@/hooks/useAction";
 import { updateList } from "@/actions/updateList";
 import ListOptions from "./listOptions";
 import { ListWithCards } from "./listContainer";
+import CreateCard from "./createCard";
+import ActionTooltip from "@/components/actionTooltip";
+import { cn } from "@/lib/utils";
+import { Separator } from "@/components/ui/separator";
+import CardItem from "./cardItem";
 
 interface ListHeaderProps {
   list: ListWithCards;
@@ -16,6 +21,7 @@ interface ListHeaderProps {
 
 const ListHeader = ({ list }: ListHeaderProps) => {
   const [isEditing, setIsEditing] = useState(false);
+  const [isCreatingCard, setIsCreatingCard] = useState(false);
   const formRef = useRef<ElementRef<"form">>(null);
   const inputRef = useRef<ElementRef<"input">>(null);
   const { toast } = useToast();
@@ -100,14 +106,46 @@ const ListHeader = ({ list }: ListHeaderProps) => {
   }
 
   return (
-    <div className="flex items-center justify-between rounded-md   bg-white/90 text-black hover:bg-white/80 transition">
-      <div
-        className="flex truncate items-center w-full flex-1 justify-start gap-x-1 h-10 px-4 py-2"
-        onClick={enableEditing}
-      >
-        {list.title}
+    <div className="bg-secondary text-secondary-foreground  transition rounded-md">
+      <div className="flex items-center justify-between">
+        <ActionTooltip title="click to edit title">
+          <div
+            role="button"
+            className="flex truncate items-center w-full flex-1 justify-start gap-x-1 h-10 px-4 py-2 cursor-pointer font-bold"
+            onClick={enableEditing}
+          >
+            {list.title}
+          </div>
+        </ActionTooltip>
+        <ListOptions
+          list={list}
+          setIsCreatingCard={setIsCreatingCard}
+          isCreatingCard={isCreatingCard}
+        />
       </div>
-      <ListOptions list={list} />
+      {list.cards.length ? (
+        <Separator className="w-[90%] mx-auto h-[1.4px]" />
+      ) : null}
+      <div
+        className={cn(
+          "flex flex-col gap-y-2 px-3 py-2",
+          list.cards.length > 0 ? "my-2" : "my-0 px-0 py-0"
+        )}
+      >
+        {list.cards.map((card, index) => (
+          <CardItem key={card.id} card={card} index={index} />
+        ))}
+      </div>
+      {list.cards.length ? (
+        <Separator className="w-[90%] mx-auto h-[1.4px]" />
+      ) : null}
+      <div className="w-full">
+        <CreateCard
+          list={list}
+          isCreatingCard={isCreatingCard}
+          setIsCreatingCard={setIsCreatingCard}
+        />
+      </div>
     </div>
   );
 };

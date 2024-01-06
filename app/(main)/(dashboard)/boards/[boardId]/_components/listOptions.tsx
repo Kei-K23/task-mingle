@@ -6,9 +6,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { useToast } from "@/components/ui/use-toast";
-import { useAction } from "@/hooks/useAction";
-import { MoreHorizontalIcon, Plus, Trash2Icon, X } from "lucide-react";
+import { MoreHorizontalIcon, Plus, X } from "lucide-react";
 import React, { ElementRef, useRef } from "react";
 import { ListWithCards } from "./listContainer";
 import { Separator } from "@/components/ui/separator";
@@ -17,16 +15,25 @@ import ListCopy from "./listCopy";
 
 interface ListOptionsProps {
   list: ListWithCards;
+  setIsCreatingCard: (data: boolean) => void;
+  isCreatingCard: boolean;
 }
 
-const ListOptions = ({ list }: ListOptionsProps) => {
-  const { toast } = useToast();
+const ListOptions = ({
+  list,
+  setIsCreatingCard,
+  isCreatingCard,
+}: ListOptionsProps) => {
   const closeRef = useRef<ElementRef<"button">>(null);
+
+  function onClose() {
+    closeRef?.current?.click();
+  }
 
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button className="rounded-md bg-white/90 text-black hover:bg-white/80">
+        <Button className="rounded-md" variant={"secondary"}>
           <MoreHorizontalIcon className="w-4 h-4 ml-auto" />
         </Button>
       </PopoverTrigger>
@@ -36,12 +43,16 @@ const ListOptions = ({ list }: ListOptionsProps) => {
             <X className="w-4 h-4" />
           </Button>
         </PopoverClose>
-        <p className="text-[13px] text-center font-bold">Manage List</p>
+        <p className="text-[14px] text-center font-bold">Manage List</p>
         <div className="w-full mt-4">
           <Button
             variant={"ghost"}
             className="w-full flex items-center justify-start gap-x-1"
             size={"sm"}
+            onClick={() => {
+              setIsCreatingCard(!isCreatingCard);
+              onClose();
+            }}
           >
             <Plus className="w-4 h-4" />
             Add Card...

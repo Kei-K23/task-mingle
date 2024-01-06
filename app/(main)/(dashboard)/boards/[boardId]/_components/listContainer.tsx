@@ -14,7 +14,7 @@ interface ListContainerProps {
 
 const ListContainer = ({ boardId, lists }: ListContainerProps) => {
   return (
-    <ol className="flex items-center gap-x-3 ">
+    <ol className="flex items-start gap-x-3">
       <ListForm boardId={boardId} />
       {lists.map((list) => (
         <>

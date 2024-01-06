@@ -95,7 +95,8 @@ const ListForm = ({ boardId }: ListFormProps) => {
     <div>
       <ListWrapper>
         <Button
-          className="rounded-md w-full bg-white/90 text-black hover:bg-white/80 transition flex items-center justify-start gap-x-1"
+          variant={"secondary"}
+          className="rounded-md w-full transition flex items-center justify-start gap-x-1"
           onClick={enableEditing}
         >
           <PlusCircle className="w-4 h-4" />
