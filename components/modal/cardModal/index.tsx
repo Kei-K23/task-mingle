@@ -8,6 +8,7 @@ import React from "react";
 import CardHeader from "./cardHeader";
 import { Loader2 } from "lucide-react";
 import CardDescription from "./cardDescription";
+import CardAction from "./cardAction";
 
 const CardModal = () => {
   const { onClose, isOpen, id } = useModal();
@@ -40,9 +41,12 @@ const CardModal = () => {
           ) : (
             <CardHeader.Skeleton />
           )}
-          <div className="grid grid-cols-1 md:grid-cols-4 space-y-2">
+          <div className="grid grid-cols-1 md:grid-cols-4 space-y-2 gap-4">
             <div className="col-span-3">
               <CardDescription card={cardData.data} />
+            </div>
+            <div>
+              <CardAction card={cardData.data} />
             </div>
           </div>
         </DialogContent>
