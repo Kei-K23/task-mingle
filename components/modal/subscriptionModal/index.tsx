@@ -1,13 +1,30 @@
 "use client";
 
+import { redirectStripe } from "@/actions/redirectStripe";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { useToast } from "@/components/ui/use-toast";
+import { useAction } from "@/hooks/useAction";
 import { useSubscriptionModal } from "@/hooks/useSubscriptionModal";
+import { Loader2 } from "lucide-react";
 import Image from "next/image";
 import React from "react";
 
 const SubscriptionModal = () => {
   const { isOpen, onClose } = useSubscriptionModal();
+  const { toast } = useToast();
+  const { execute, isLoading } = useAction(redirectStripe, {
+    onSuccess: (data) => {
+      window.location.href = data;
+    },
+    onError: (error) => {
+      toast({ title: error });
+    },
+  });
+
+  function onClick() {
+    execute({});
+  }
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="w-full ">
@@ -35,7 +52,18 @@ const SubscriptionModal = () => {
           </div>
         </div>
 
-        <Button className="w-full md:w-[50%] mx-auto">Upgrade</Button>
+        <Button
+          onClick={onClick}
+          className="w-full md:w-[50%] mx-auto flex items-center gap-x-1"
+        >
+          {isLoading ? (
+            <>
+              <Loader2 className="w-4 h-4 animate-spin" /> Checking...
+            </>
+          ) : (
+            <>Upgrade</>
+          )}
+        </Button>
       </DialogContent>
     </Dialog>
   );

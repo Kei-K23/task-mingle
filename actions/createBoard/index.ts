@@ -9,6 +9,7 @@ import { CreateBoardSchema } from "./schema";
 import { createAuditLog } from "@/lib/create-audit-log";
 import { ACTION, ENTITY_TYPE } from "@/type";
 import { hasAvailableCount, incrementAvailableCount } from "@/lib/org-limit";
+import { checkSubScription } from "@/lib/subscription";
 
 async function handler(validatedData: InputType): Promise<ReturnType> {
   const { userId, orgId } = auth();
@@ -22,8 +23,9 @@ async function handler(validatedData: InputType): Promise<ReturnType> {
   const { title, image } = validatedData;
 
   const canCreateBoard = await hasAvailableCount();
+  const isSubscribed = await checkSubScription();
 
-  if (!canCreateBoard) {
+  if (!canCreateBoard && !isSubscribed) {
     return {
       error:
         "You have reached your limit! Please upgrade your plan to create more Boards.",
@@ -60,7 +62,9 @@ async function handler(validatedData: InputType): Promise<ReturnType> {
       },
     });
 
-    await incrementAvailableCount();
+    if (!isSubscribed) {
+      await incrementAvailableCount();
+    }
     // create audit log
     await createAuditLog({
       action: ACTION["CREATE"],

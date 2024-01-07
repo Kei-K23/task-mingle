@@ -9,10 +9,11 @@ import { DeleteBoardSchema } from "./schema";
 import { createAuditLog } from "@/lib/create-audit-log";
 import { ACTION, ENTITY_TYPE } from "@/type";
 import { decrementAvailableCount } from "@/lib/org-limit";
+import { checkSubScription } from "@/lib/subscription";
 
 async function handler(validatedData: InputType): Promise<ReturnType> {
   const { userId, orgId } = auth();
-
+  const isSubscribe = await checkSubScription();
   if (!userId || !orgId) {
     return {
       error: "Unauthorized",
@@ -28,7 +29,9 @@ async function handler(validatedData: InputType): Promise<ReturnType> {
       },
     });
 
-    await decrementAvailableCount();
+    if (!isSubscribe) {
+      await decrementAvailableCount();
+    }
 
     // create audit log
     await createAuditLog({

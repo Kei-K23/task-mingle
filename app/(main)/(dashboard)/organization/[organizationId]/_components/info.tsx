@@ -5,7 +5,7 @@ import { CreditCard } from "lucide-react";
 import Image from "next/image";
 import React from "react";
 
-const Info = () => {
+const Info = ({ isSubscribe }: { isSubscribe: boolean }) => {
   const { organization, isLoaded } = useOrganization();
   if (!isLoaded) {
     return <Info.Skeleton />;
@@ -25,7 +25,7 @@ const Info = () => {
         <h2 className="font-bold">{organization?.name}</h2>
         <div className="flex items-center gap-x-1 text-sm text-muted-foreground">
           <CreditCard className="w-4 h-4" />
-          Free
+          {isSubscribe ? "Pro" : "Free"}
         </div>
       </div>
     </div>

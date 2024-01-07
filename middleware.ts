@@ -2,7 +2,7 @@ import { authMiddleware, redirectToSignIn } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 
 export default authMiddleware({
-  publicRoutes: ["/"],
+  publicRoutes: ["/", "/api/webhook"],
   afterAuth: (auth, req) => {
     // check user is auth. If they are auth and url is landing then redirect to /select-org url if they do not have org or if they have org then redirect to that org
     if (auth.userId && auth.isPublicRoute) {
