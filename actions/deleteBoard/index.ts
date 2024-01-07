@@ -8,6 +8,7 @@ import { createSafeAction } from "@/lib/create-safe-action";
 import { DeleteBoardSchema } from "./schema";
 import { createAuditLog } from "@/lib/create-audit-log";
 import { ACTION, ENTITY_TYPE } from "@/type";
+import { decrementAvailableCount } from "@/lib/org-limit";
 
 async function handler(validatedData: InputType): Promise<ReturnType> {
   const { userId, orgId } = auth();
@@ -26,6 +27,8 @@ async function handler(validatedData: InputType): Promise<ReturnType> {
         id,
       },
     });
+
+    await decrementAvailableCount();
 
     // create audit log
     await createAuditLog({

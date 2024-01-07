@@ -15,6 +15,7 @@ import { X } from "lucide-react";
 import React, { ElementRef, useRef } from "react";
 import FormPicker from "./formPicker";
 import { useRouter } from "next/navigation";
+import { useSubscriptionModal } from "@/hooks/useSubscriptionModal";
 
 interface FormPopoverProps {
   children: React.ReactNode;
@@ -32,6 +33,7 @@ const FormPopover = ({
   const router = useRouter();
   const closeRef = useRef<ElementRef<"button">>(null);
   const { toast } = useToast();
+  const { onOpen } = useSubscriptionModal();
   const { fieldsErrors, execute } = useAction(createBoard, {
     onSuccess: (data) => {
       toast({ title: "Board created" });
@@ -40,6 +42,7 @@ const FormPopover = ({
     },
     onError: (error) => {
       toast({ title: error });
+      onOpen();
     },
   });
 

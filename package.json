@@ -30,6 +30,7 @@
     "next": "14.0.4",
     "react": "^18",
     "react-dom": "^18",
+    "stripe": "^14.11.0",
     "tailwind-merge": "^2.2.0",
     "tailwindcss-animate": "^1.0.7",
     "unsplash-js": "^7.0.19",

@@ -8,6 +8,7 @@ import { createSafeAction } from "@/lib/create-safe-action";
 import { CreateBoardSchema } from "./schema";
 import { createAuditLog } from "@/lib/create-audit-log";
 import { ACTION, ENTITY_TYPE } from "@/type";
+import { hasAvailableCount, incrementAvailableCount } from "@/lib/org-limit";
 
 async function handler(validatedData: InputType): Promise<ReturnType> {
   const { userId, orgId } = auth();
@@ -19,6 +20,15 @@ async function handler(validatedData: InputType): Promise<ReturnType> {
   }
 
   const { title, image } = validatedData;
+
+  const canCreateBoard = await hasAvailableCount();
+
+  if (!canCreateBoard) {
+    return {
+      error:
+        "You have reached your limit! Please upgrade your plan to create more Boards.",
+    };
+  }
 
   const [imageId, imageThumbUrl, imageFullUrl, imageHTMLUrl, imageUsername] =
     image.split("|");
@@ -50,6 +60,7 @@ async function handler(validatedData: InputType): Promise<ReturnType> {
       },
     });
 
+    await incrementAvailableCount();
     // create audit log
     await createAuditLog({
       action: ACTION["CREATE"],

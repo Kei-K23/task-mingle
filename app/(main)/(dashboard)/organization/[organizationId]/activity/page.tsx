@@ -13,6 +13,9 @@ const ActivityPage = async ({
     where: {
       orgId: params.organizationId,
     },
+    orderBy: {
+      createdAt: "desc",
+    },
   });
 
   return (

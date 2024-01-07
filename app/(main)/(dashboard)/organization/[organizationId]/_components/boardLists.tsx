@@ -7,6 +7,8 @@ import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
 import Link from "next/link";
 import { Skeleton } from "@/components/ui/skeleton";
+import { getAvailableCount } from "@/lib/org-limit";
+import { MAX_FREE_BOARD_LIMIT } from "@/constants/board";
 
 const BoardLists = async () => {
   const { orgId } = auth();
@@ -21,6 +23,8 @@ const BoardLists = async () => {
     },
   });
 
+  const availableCount = await getAvailableCount();
+
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-x-1 text-lg font-bold">
@@ -34,7 +38,7 @@ const BoardLists = async () => {
             className="border w-full h-full px-3 py-2 text-center bg-slate-200 hover:bg-slate-200/85 rounded-md relative flex justify-center items-center flex-col"
           >
             <p>Create new board</p>
-            <span>5 remaining</span>
+            <span>{`${MAX_FREE_BOARD_LIMIT - availableCount}`} remaining</span>
             <ActionTooltip
               title="Free Workspaces board can have up to 5. For unlimited accept Workspaces upgrade the plan."
               className="w-[250px]"
