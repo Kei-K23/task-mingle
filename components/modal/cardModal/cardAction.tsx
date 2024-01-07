@@ -4,6 +4,7 @@ import { deleteCard } from "@/actions/deleteCard";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { useAction } from "@/hooks/useAction";
+import { useModal } from "@/hooks/useModal";
 import { CardWithList } from "@/type";
 import { Copy, FunctionSquare, Trash2Icon } from "lucide-react";
 import { useParams } from "next/navigation";
@@ -15,6 +16,7 @@ interface CardActionProps {
 
 const CardAction = ({ card }: CardActionProps) => {
   const { toast } = useToast();
+  const { onClose } = useModal();
   const { boardId } = useParams();
 
   const { execute: executeForCopy, isLoading: isLoadingForCopy } = useAction(
@@ -24,6 +26,7 @@ const CardAction = ({ card }: CardActionProps) => {
         toast({
           title: `Card "${data.title}" copied!`,
         });
+        onClose();
       },
       onError: (e) => {
         toast({
@@ -47,6 +50,7 @@ const CardAction = ({ card }: CardActionProps) => {
         toast({
           title: `Card "${data.title}" deleted!`,
         });
+        onClose();
       },
       onError: (e) => {
         toast({
@@ -55,7 +59,6 @@ const CardAction = ({ card }: CardActionProps) => {
       },
     });
 
-  // TODO: after deleting close the dialog !
   function onDelete() {
     executeForDelete({
       id: card.id,

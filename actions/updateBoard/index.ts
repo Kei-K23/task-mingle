@@ -6,6 +6,8 @@ import { db } from "@/lib/db";
 import { revalidatePath } from "next/cache";
 import { createSafeAction } from "@/lib/create-safe-action";
 import { UpdateBoardSchema } from "./schema";
+import { createAuditLog } from "@/lib/create-audit-log";
+import { ACTION, ENTITY_TYPE } from "@/type";
 
 async function handler(validatedData: InputType): Promise<ReturnType> {
   const { userId, orgId } = auth();
@@ -26,6 +28,14 @@ async function handler(validatedData: InputType): Promise<ReturnType> {
       data: {
         title,
       },
+    });
+
+    // create audit log
+    await createAuditLog({
+      action: ACTION["UPDATE"],
+      entityId: board.id,
+      entityTitle: board.title,
+      entityType: ENTITY_TYPE["BOARD"],
     });
   } catch (error) {
     return {

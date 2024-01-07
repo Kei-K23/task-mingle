@@ -9,6 +9,8 @@ import CardHeader from "./cardHeader";
 import { Loader2 } from "lucide-react";
 import CardDescription from "./cardDescription";
 import CardAction from "./cardAction";
+import CardAuditLog from "./cardAuditLog";
+import { AuditLog } from "@prisma/client";
 
 const CardModal = () => {
   const { onClose, isOpen, id } = useModal();
@@ -19,6 +21,14 @@ const CardModal = () => {
   }>({
     queryKey: ["cards", id],
     queryFn: () => fetcher(`/api/cards/${id}`),
+  });
+
+  const { data: auditLogData, status: auditLogDataStatus } = useQuery<{
+    success: boolean;
+    data: AuditLog[];
+  }>({
+    queryKey: ["cards", "activity-log", id],
+    queryFn: () => fetcher(`/api/cards/${id}/activity-log`),
   });
 
   if (status === "pending") {
@@ -41,9 +51,12 @@ const CardModal = () => {
           ) : (
             <CardHeader.Skeleton />
           )}
-          <div className="grid grid-cols-1 md:grid-cols-4 space-y-2 gap-4">
-            <div className="col-span-3">
+          <div className="grid grid-cols-1 md:grid-cols-4 space-y-4 gap-4">
+            <div className="col-span-3 space-y-4">
               <CardDescription card={cardData.data} />
+              {auditLogDataStatus === "success" && (
+                <CardAuditLog auditLogs={auditLogData.data} />
+              )}
             </div>
             <div>
               <CardAction card={cardData.data} />

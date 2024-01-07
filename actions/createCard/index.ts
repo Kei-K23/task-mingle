@@ -6,6 +6,8 @@ import { db } from "@/lib/db";
 import { revalidatePath } from "next/cache";
 import { createSafeAction } from "@/lib/create-safe-action";
 import { CreateCardSchema } from "./schema";
+import { createAuditLog } from "@/lib/create-audit-log";
+import { ACTION, ENTITY_TYPE } from "@/type";
 
 async function handler(validatedData: InputType): Promise<ReturnType> {
   const { userId, orgId } = auth();
@@ -39,7 +41,7 @@ async function handler(validatedData: InputType): Promise<ReturnType> {
         listId,
       },
       orderBy: {
-        order: "asc",
+        order: "desc",
       },
       select: {
         order: true,
@@ -55,7 +57,17 @@ async function handler(validatedData: InputType): Promise<ReturnType> {
         order: newOrder,
       },
     });
+
+    // create audit log
+    await createAuditLog({
+      action: ACTION["CREATE"],
+      entityId: card.id,
+      entityTitle: card.title,
+      entityType: ENTITY_TYPE["CARD"],
+    });
   } catch (error) {
+    console.log(error);
+
     return {
       error: "Something went wrong when creating card!",
     };

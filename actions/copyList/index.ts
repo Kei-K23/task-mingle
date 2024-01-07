@@ -6,6 +6,8 @@ import { db } from "@/lib/db";
 import { revalidatePath } from "next/cache";
 import { createSafeAction } from "@/lib/create-safe-action";
 import { CopyListSchema } from "./schema";
+import { createAuditLog } from "@/lib/create-audit-log";
+import { ACTION, ENTITY_TYPE } from "@/type";
 
 async function handler(validatedData: InputType): Promise<ReturnType> {
   const { userId, orgId } = auth();
@@ -74,6 +76,14 @@ async function handler(validatedData: InputType): Promise<ReturnType> {
       include: {
         cards: true,
       },
+    });
+
+    // create audit log
+    await createAuditLog({
+      action: ACTION["COPY"],
+      entityId: list.id,
+      entityTitle: list.title,
+      entityType: ENTITY_TYPE["LIST"],
     });
   } catch (error) {
     return {

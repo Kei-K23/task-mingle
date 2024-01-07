@@ -16,6 +16,7 @@ import { Droppable } from "@hello-pangea/dnd";
 import { useToast } from "@/components/ui/use-toast";
 import { ListWithCards } from "@/type";
 import { useRouter } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface ListHeaderProps {
   list: ListWithCards;
@@ -28,6 +29,8 @@ const ListHeader = ({ list }: ListHeaderProps) => {
   const inputRef = useRef<ElementRef<"input">>(null);
   const { toast } = useToast();
   const router = useRouter();
+  const queryClient = useQueryClient();
+
   const { execute, fieldsErrors } = useAction(updateList, {
     onSuccess: (data) => {
       toast({
