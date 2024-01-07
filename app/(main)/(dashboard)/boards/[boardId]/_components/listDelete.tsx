@@ -3,9 +3,9 @@ import { deleteList } from "@/actions/deleteList";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { useAction } from "@/hooks/useAction";
+import { ListWithCards } from "@/type";
 import { Trash2Icon } from "lucide-react";
 import React from "react";
-import { ListWithCards } from "./listContainer";
 
 interface ListDeleteProps {
   list: ListWithCards;

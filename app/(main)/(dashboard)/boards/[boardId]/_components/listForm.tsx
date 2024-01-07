@@ -9,6 +9,7 @@ import FormButton from "@/components/form/formButton";
 import { useToast } from "@/components/ui/use-toast";
 import { useAction } from "@/hooks/useAction";
 import { createList } from "@/actions/createList";
+import { useRouter } from "next/navigation";
 
 interface ListFormProps {
   boardId: string;
@@ -18,6 +19,7 @@ const ListForm = ({ boardId }: ListFormProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const formRef = useRef<ElementRef<"form">>(null);
   const inputRef = useRef<ElementRef<"input">>(null);
+  const router = useRouter();
   const { toast } = useToast();
 
   const { execute, fieldsErrors } = useAction(createList, {
@@ -25,6 +27,7 @@ const ListForm = ({ boardId }: ListFormProps) => {
       toast({
         title: `Successfully created "${data.title}"`,
       });
+      router.refresh();
       disableEditing();
     },
     onError: (e) => {

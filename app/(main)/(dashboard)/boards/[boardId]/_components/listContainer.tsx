@@ -1,6 +1,5 @@
 "use client";
-import { Card, List } from "@prisma/client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ListForm from "./listForm";
 import ListItem from "./listItem";
 import { DragDropContext, Droppable } from "@hello-pangea/dnd";
@@ -8,10 +7,8 @@ import { useToast } from "@/components/ui/use-toast";
 import { useAction } from "@/hooks/useAction";
 import { updateListOrder } from "@/actions/updateListOrder";
 import { updateCardOrder } from "@/actions/updateCardOrder ";
-
-export type ListWithCards = List & {
-  cards: Card[];
-};
+import { ListWithCards } from "@/type";
+import { useRouter } from "next/navigation";
 
 interface ListContainerProps {
   boardId: string;
@@ -29,14 +26,18 @@ function reOrder<T>(list: T[], startIndex: number, endIndex: number) {
 const ListContainer = ({ boardId, lists: dataLists }: ListContainerProps) => {
   const [lists, setLists] = useState(dataLists);
 
+  useEffect(() => {
+    setLists(dataLists);
+  }, [dataLists]);
+
   const { toast } = useToast();
+  const router = useRouter();
   const { execute: executeForReOrderLists } = useAction(updateListOrder, {
     onSuccess: (_data) => {
-      console.log(_data);
-
       toast({
         title: `Reorder lists`,
       });
+      router.refresh();
     },
     onError: (e) => {
       toast({
@@ -47,11 +48,10 @@ const ListContainer = ({ boardId, lists: dataLists }: ListContainerProps) => {
 
   const { execute: executeForReOrderCards } = useAction(updateCardOrder, {
     onSuccess: (_data) => {
-      console.log(_data);
-
       toast({
         title: `Reorder cards`,
       });
+      router.refresh();
     },
     onError: (e) => {
       toast({

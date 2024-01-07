@@ -7,7 +7,7 @@ export const CreateCardSchema = z.object({
       invalid_type_error: "Title must be type of string",
     })
     .min(1, {
-      message: "Title must be at least 3 character",
+      message: "Title must be at least 1 character",
     }),
   listId: z.string({
     required_error: "List id is require!",

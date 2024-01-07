@@ -7,7 +7,6 @@ import { useEventListener } from "usehooks-ts";
 import { useAction } from "@/hooks/useAction";
 import { updateList } from "@/actions/updateList";
 import ListOptions from "./listOptions";
-import { ListWithCards } from "./listContainer";
 import CreateCard from "./createCard";
 import ActionTooltip from "@/components/actionTooltip";
 import { cn } from "@/lib/utils";
@@ -15,6 +14,8 @@ import { Separator } from "@/components/ui/separator";
 import CardItem from "./cardItem";
 import { Droppable } from "@hello-pangea/dnd";
 import { useToast } from "@/components/ui/use-toast";
+import { ListWithCards } from "@/type";
+import { useRouter } from "next/navigation";
 
 interface ListHeaderProps {
   list: ListWithCards;
@@ -26,11 +27,13 @@ const ListHeader = ({ list }: ListHeaderProps) => {
   const formRef = useRef<ElementRef<"form">>(null);
   const inputRef = useRef<ElementRef<"input">>(null);
   const { toast } = useToast();
+  const router = useRouter();
   const { execute, fieldsErrors } = useAction(updateList, {
     onSuccess: (data) => {
       toast({
         title: `Successfully updated "${data.title}"`,
       });
+      router.refresh();
       disableEditing();
     },
     onError: (e) => {

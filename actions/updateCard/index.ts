@@ -5,7 +5,7 @@ import { InputType, ReturnType } from "./type";
 import { db } from "@/lib/db";
 import { revalidatePath } from "next/cache";
 import { createSafeAction } from "@/lib/create-safe-action";
-import { CreateListSchema } from "./schema";
+import { UpdateCardSchema } from "./schema";
 
 async function handler(validatedData: InputType): Promise<ReturnType> {
   const { userId, orgId } = auth();
@@ -16,9 +16,9 @@ async function handler(validatedData: InputType): Promise<ReturnType> {
     };
   }
 
-  const { title, boardId } = validatedData;
+  const { id, boardId, ...values } = validatedData;
 
-  let list;
+  let card;
 
   try {
     const board = await db.board.findFirst({
@@ -34,38 +34,35 @@ async function handler(validatedData: InputType): Promise<ReturnType> {
       };
     }
 
-    const lastOrder = await db.list.findFirst({
+    card = await db.card.update({
       where: {
-        boardId,
+        id,
+        list: {
+          board: {
+            orgId,
+          },
+        },
       },
-      orderBy: {
-        order: "desc",
-      },
-      select: {
-        order: true,
-      },
-    });
-
-    const newOrder = lastOrder ? lastOrder.order + 1 : 1;
-
-    list = await db.list.create({
       data: {
-        title,
-        boardId,
-        order: newOrder,
+        ...values,
       },
       include: {
-        cards: true,
+        list: {
+          select: {
+            title: true,
+          },
+        },
       },
     });
   } catch (error) {
     return {
-      error: "Something went wrong when creating list!",
+      error: "Something went wrong when updating card!",
     };
   }
 
   revalidatePath(`/boards/${boardId}`);
-  return { data: list };
+  revalidatePath("/");
+  return { data: card };
 }
 
-export const createList = createSafeAction(CreateListSchema, handler);
+export const updateCard = createSafeAction(UpdateCardSchema, handler);

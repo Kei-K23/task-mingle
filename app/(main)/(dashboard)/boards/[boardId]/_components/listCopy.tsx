@@ -4,8 +4,8 @@ import { useToast } from "@/components/ui/use-toast";
 import { useAction } from "@/hooks/useAction";
 import { Copy } from "lucide-react";
 import React from "react";
-import { ListWithCards } from "./listContainer";
 import { copyList } from "@/actions/copyList";
+import { ListWithCards } from "@/type";
 
 interface ListCopy {
   list: ListWithCards;

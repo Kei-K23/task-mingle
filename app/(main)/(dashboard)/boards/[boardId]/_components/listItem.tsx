@@ -1,8 +1,8 @@
 "use client";
 import React from "react";
-import type { ListWithCards } from "./listContainer";
 import ListHeader from "./listHeader";
 import { Draggable } from "@hello-pangea/dnd";
+import { ListWithCards } from "@/type";
 
 interface ListItemProps {
   list: ListWithCards;

@@ -9,8 +9,8 @@ import { useAction } from "@/hooks/useAction";
 import { Plus, X } from "lucide-react";
 import React, { ElementRef, useEffect, useRef, useState } from "react";
 import { useEventListener } from "usehooks-ts";
-import { ListWithCards } from "./listContainer";
 import { useParams } from "next/navigation";
+import { ListWithCards } from "@/type";
 
 interface CreateCardProps {
   list: ListWithCards;

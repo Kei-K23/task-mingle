@@ -8,10 +8,10 @@ import {
 } from "@/components/ui/popover";
 import { MoreHorizontalIcon, Plus, X } from "lucide-react";
 import React, { ElementRef, useRef } from "react";
-import { ListWithCards } from "./listContainer";
 import { Separator } from "@/components/ui/separator";
 import ListDelete from "./listDelete";
 import ListCopy from "./listCopy";
+import { ListWithCards } from "@/type";
 
 interface ListOptionsProps {
   list: ListWithCards;
