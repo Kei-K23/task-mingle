@@ -9,7 +9,7 @@ import { useOrganization, useOrganizationList } from "@clerk/nextjs";
 import { Plus } from "lucide-react";
 import Link from "next/link";
 import { useLocalStorage } from "usehooks-ts";
-import OrganizationItem, { OrganizationType } from "./organizationItem";
+import OrgItem, { OrganizationType } from "./orgItem";
 
 interface SidebarProps {
   sidebarStorageKey: string;
@@ -58,9 +58,9 @@ const Sidebar = ({ sidebarStorageKey }: SidebarProps) => {
           <Skeleton className="w-[50px] h-8 ml-auto" />
         </div>
         <div className="space-y-2">
-          <OrganizationItem.Skeleton />
-          <OrganizationItem.Skeleton />
-          <OrganizationItem.Skeleton />
+          <OrgItem.Skeleton />
+          <OrgItem.Skeleton />
+          <OrgItem.Skeleton />
         </div>
       </>
     );
@@ -88,7 +88,7 @@ const Sidebar = ({ sidebarStorageKey }: SidebarProps) => {
         className="space-y-3"
       >
         {userMemberships.data.map(({ organization }) => (
-          <OrganizationItem
+          <OrgItem
             key={organization.id}
             isActive={activeOrganization?.id === organization.id}
             isExpanded={expanded[organization.id]}

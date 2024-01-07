@@ -18,19 +18,19 @@ export type OrganizationType = {
   imageUrl: string;
 };
 
-interface OrganizationItemProps {
+interface OrItemProps {
   isActive: boolean;
   isExpanded: boolean;
   organization: OrganizationType;
   onExpand: (id: string) => void;
 }
 
-const OrganizationItem = ({
+const OrgItem = ({
   isActive,
   isExpanded,
   onExpand,
   organization,
-}: OrganizationItemProps) => {
+}: OrItemProps) => {
   const router = useRouter();
   const pathname = usePathname();
   const routes = [
@@ -101,12 +101,12 @@ const OrganizationItem = ({
   );
 };
 
-export default OrganizationItem;
-
-OrganizationItem.Skeleton = function SkeletonOrganizationItem() {
+OrgItem.Skeleton = function SkeletonOrganizationItem() {
   return (
     <div className="flex rounded-md w-full h-9">
       <Skeleton className="w-full h-full" />
     </div>
   );
 };
+
+export default OrgItem;
